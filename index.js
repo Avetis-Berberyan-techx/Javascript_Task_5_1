@@ -48,13 +48,21 @@ const fetchDogFacts = (method, url) => {
     });
 };
 
+fetchDogFacts("GET", DOG_API).then((data) => {
+  if (Array.isArray(data)) {
+    console.log("fetching dog facts");
+    data.forEach((fact, i) => console.log(`${i + 1}. ${fact}`));
+    console.log("------------------------------------------------------------");
+  }
+});
+
 // Fetch dog facts using async/await
 const fetchDogFactsWithAsync = async (method, url) => {
   const headers = { "Content-Type": "application/json" };
 
   try {
     const response = await fetch(url, { method, headers });
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    // if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
     const json = await response.json();
     const sortedFacts = sortFactsByLength(json.data, "asc");
@@ -69,9 +77,25 @@ const fetchDogFactsWithAsync = async (method, url) => {
 };
 
 // Call the async function
-fetchDogFacts("GET", DOG_API).then((data) => {
+
+fetchDogFactsWithAsync("GET", DOG_API).then((data) => {
   if (Array.isArray(data)) {
-    console.log("Fetched & sorted facts:");
+    console.log("Fetched & sorted facts with async await:");
     data.forEach((fact, i) => console.log(`${i + 1}. ${fact}`));
+    console.log(
+      "------------------------------------------------------------------"
+    );
+  }
+});
+
+const FAKE_DOG_API = "https://dogapi.do/api/v2/facts?limit=5";
+
+fetchDogFactsWithAsync("GET", FAKE_DOG_API).then((data) => {
+  if (Array.isArray(data)) {
+    console.log("Fetched & sorted facts with async await:");
+    data.forEach((fact, i) => console.log(`${i + 1}. ${fact}`));
+    console.log(
+      "------------------------------------------------------------------"
+    );
   }
 });
